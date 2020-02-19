@@ -10,6 +10,7 @@ export abstract class Model<Data> {
     this.curData = data;
   }
 
+  // Методы Indev
   public save() {
     console.info('Saving curData:')
     console.info(this.curData)

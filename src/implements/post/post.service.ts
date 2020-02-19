@@ -19,4 +19,8 @@ export class PostService extends BaseService {
   showSwitchState() {
     console.log(this.state.switch ? "Включен" : "Выключен");
   }
+
+  async helloWorld(req, res) {
+    await res.send("hello world");
+  }
 }

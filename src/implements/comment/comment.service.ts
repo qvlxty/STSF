@@ -1,12 +1,11 @@
 import { BaseService } from "../../core/base.service";
 import { PostService } from "../../implements/post/post.service";
 import { CommentModel } from "./comment.model";
-import { Container } from "core/container.class";
+import { Container } from "../../core/container.class";
 
 export class CommentService extends BaseService {
   constructor(
     e: Container,
-    // ToDo: Можно заменить на декораторы
     private readonly postService: PostService = e.getService(PostService),
     private readonly commentModel: CommentModel = e.getModel(CommentModel)
   ) {

@@ -9,6 +9,10 @@
   "author": "qualixity",
   "license": "ISC",
   "dependencies": {
+    "@types/convict": "^4.2.1",
+    "@types/express": "^4.17.2",
+    "convict": "^5.2.0",
+    "express": "^4.17.1",
     "typescript": "^3.7.5"
   }
 }
