@@ -5,7 +5,7 @@ interface IServiceStack {
   [key: string]: BaseService;
 }
 interface IModelStack {
-  [key: string]: Model;
+  [key: string]: Model<any>;
 }
 
 export class Container {
@@ -27,10 +27,16 @@ export class Container {
   }
 
   // ToDo: вскрыть на что можно заменить any (нужен указатель на класс)
-  public getModel = (type): any | null => {
+  public getModel = (type): any => {
+    if (this.models[type.name] === null || typeof this.models[type.name] === 'undefined') {
+      this.registerModel(type);
+    };
     return this.models[type.name];
   };
-  public getService = (type): any | null => {
+  public getService = (type): any => {
+    if (this.services[type.name] === null || typeof this.services[type.name] === 'undefined') {
+      this.registerService(type);
+    };
     return this.services[type.name];
   };
 
