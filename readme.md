@@ -8,10 +8,17 @@ v 0.0.3
 
 ## Запуск
 
+`npm i`
+
 `npm run start`
 
+## Дока
 
-# log
+- [Экземпляр приложения](docs/app.md)
+- [Контроллер](docs/controller.md)
+- [Инъекция зависимости](docs/injection.md)
+
+## log
 
 v 0.0.3 : 
 
