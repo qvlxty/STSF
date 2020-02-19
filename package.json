@@ -4,8 +4,11 @@
   "description": "di container test",
   "main": "main.js",
   "scripts": {
-    "start":"tsc && node dist/main.js"
+    "start": "tsc && node dist/main.js"
   },
   "author": "qualixity",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "typescript": "^3.7.5"
+  }
 }
