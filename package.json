@@ -1,0 +1,11 @@
+{
+  "name": "dicontainer",
+  "version": "0.0.1",
+  "description": "di container test",
+  "main": "main.js",
+  "scripts": {
+    "start":"tsc && node dist/main.js"
+  },
+  "author": "qualixity",
+  "license": "ISC"
+}
