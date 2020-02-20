@@ -10,7 +10,7 @@ const bootApp = function() {
   const AppContainer = new Container();
   // Чтобы схемы моделей подключились для работы, необходимо
   // Регистрировать модели вручную
-  // AppContainer.registerService(DbService);
+  AppContainer.registerService(DbService);
   // Регистрация всех контроллеров, живущих в приложении
   AppContainer.loadControllers([PostController, UserController]);
   AppContainer.loadRoutes(expressApp);

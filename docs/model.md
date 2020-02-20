@@ -29,31 +29,37 @@ export class PostRepository extends Repository<Post> {}
 
 Для описания схем исопльзуется файл **db/db.migration.service**.
 
+Схемы для описания сущностей хранятся в каталоге **db/schema**
+
 Ниже приведён пример для sequelize orm:
 
 ```ts
-// db.service.ts Создание User для sequelize
+// db/schema/user.schema.ts
+import { DataTypes } from "sequelize";
 
+export const UserSchema = {
+  login: DataTypes.STRING,
+  password: DataTypes.STRING
+};
+
+// db.service.ts Создание User для sequelize
 export class DbService extends BaseService {
 
-  ... Конструктор и настройка источника истины БД ...
+  ...
 
-public initModels() {
-    User.init(
-      {
-        login: DataTypes.STRING,
-        password: DataTypes.STRING,
-      },
-      { sequelize: this.connection }
-    );
+  public initModels(c: Container) {
+    console.info("[SERVER] Initial Models...");
+    User.init(UserSchema, { sequelize: this.connection });
+    c.getRepository(UserRepository).model = User;
+    console.info("[SERVER] Models loaded");
   }
-}
+
 // user.repository.ts в модуле user
 import { Repository } from "core/base.repository";
 import sequelize = require("sequelize");
 
 export class User extends sequelize.Model {}
-export class UserRepository extends Repository<User> {}
+export class UserRepository extends Repository<typeof User> {}
 ```
 
 Обратите внимание, что в конструкторе

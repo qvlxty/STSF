@@ -6,6 +6,7 @@ import {
   User,
   UserRepository
 } from "../../implements/modules/user/user.repository";
+import { UserSchema } from "./schema/user.schema";
 
 export class DbService extends BaseService {
   private readonly connection;
@@ -33,14 +34,10 @@ export class DbService extends BaseService {
   };
 
   public initModels(c: Container) {
-    c.getRepository(UserRepository).model = User.init(
-      {
-        login: DataTypes.STRING,
-        password: DataTypes.STRING
-      },
-      { sequelize: this.connection }
-    );
-    console.log(c.getRepository(UserRepository));
+    console.info("[SERVER] Initial Models...");
+    User.init(UserSchema, { sequelize: this.connection });
+    c.getRepository(UserRepository).model = User;
+    console.info("[SERVER] Models loaded");
   }
 
   async mainMigrate() {
