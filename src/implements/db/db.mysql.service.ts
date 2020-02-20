@@ -11,7 +11,7 @@ export class DbMysqlService extends DbService {
     super(c);
   }
 
-  public setupConnection = () => {
+  public setupConnection() {
     this.connection = new Sequelize(
       this.configService.config.get("db.dbname"),
       this.configService.config.get("db.name"),
@@ -20,7 +20,7 @@ export class DbMysqlService extends DbService {
         dialect: "mysql"
       }
     );
-  };
+  }
 
   public syncSchema = async () => {
     await this.dbConnection().sync();

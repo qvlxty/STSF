@@ -5,6 +5,8 @@ import { Repository } from "core/base.repository";
 export class User extends Model {}
 export class UserRepository extends Repository<typeof User> {
   loadSchema(dbService: DbMysqlService) {
+    console.info(dbService);
+    console.info(dbService.setupConnection());
     console.info(dbService.dbConnection);
     User.init(
       {
