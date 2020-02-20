@@ -3,8 +3,9 @@ import { IRoute, HttpMethod } from "./base.controller";
 
 interface ISettings {
   viewEngine?: string; // Шаблонизатор
-  modules?: any[]; // .use(...)
-  staticFolders?: { path: string; folder: string }[];
+  modules?: any[]; // .use(...) Мидлвары
+  staticFolders?: { path: string; folder: string }[]; // Каталоги со статикой
+  viewCatalog?: string; // Каталог view файлов
 }
 
 /*
@@ -33,19 +34,26 @@ export abstract class App {
 
 /*
   Пример реализации для библиотеки ExpressJS
-*/ 
+*/
+
 export class AppExpress extends App {
   constructor(server = Express(), router: Express.Router = Express.Router()) {
     super(server, router);
     server.use(router);
   }
 
-  setupApp = ({ viewEngine, modules, staticFolders }: ISettings) => {
+  setupApp = ({
+    viewEngine,
+    modules,
+    staticFolders,
+    viewCatalog
+  }: ISettings) => {
     if (viewEngine !== null) this.server.set("view engine", viewEngine);
     if (modules !== null) for (const iter of modules) this.server.use(iter);
     if (staticFolders !== null)
       for (const iter of staticFolders)
         this.server.use(iter.path, Express.static(iter.path));
+    if (viewCatalog !== null) this.server.set("views", viewCatalog);
   };
 
   routeInstall = (r: IRoute, controllerPrefix: string = "") => {

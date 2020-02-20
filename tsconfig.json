@@ -8,10 +8,13 @@
     "target": "es6",
     "sourceMap": true,
     "outDir": "./dist",
-    "baseUrl": "./src/",
+    "baseUrl": "./src",
     "incremental": true,
-    "lib": ["es2017", "dom"]
+    "lib": ["es2017", "dom"],
+    "paths": {
+      "@":["/*"]
+    }
   },
-  "include": ["./src/**/**/*.ts"],
-  "exclude": ["dist"]
+  "include": ["./src/**/*.ts"],
+  "exclude": ["dist","node_modules"],
 }

@@ -1,7 +1,7 @@
-import { Controller, IRoute, HttpMethod } from "../../../core/base.controller";
-import { Container } from "core/container.class";
 import { UserService } from "./user.service";
 import { Request, Response } from "express";
+import { Container } from "core/container.class";
+import { Controller, HttpMethod } from "core/base.controller";
 
 export class UserController extends Controller {
   constructor(

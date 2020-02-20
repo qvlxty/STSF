@@ -1,4 +1,4 @@
-import { BaseService } from "../../core/base.service";
+import { BaseService } from "../../base.service";
 import * as convict from "convict";
 import { ConfigSchema } from "./config.schema";
 
@@ -15,7 +15,7 @@ export class ConfigService extends BaseService {
     return this.configData;
   }
   private generateConfig = () => {
-    // Define a schema
+    console.info('[SERVER] Loading Config...')
     this.configData = convict(ConfigSchema);
     this.configData.loadFile("config.json");
     this.configData.validate({ allowed: "strict" });

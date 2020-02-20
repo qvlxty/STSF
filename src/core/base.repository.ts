@@ -1,10 +1,11 @@
 import { Container } from "./container.class";
+import { DbService } from "./services/db/db.service";
 
 export abstract class Repository<Model> {
-  private readonly model: Model;
+  public readonly model: Model;
   constructor(private readonly mainContainer: Container) {
     console.info(`[SERVER] Repository ${this.constructor.name} loaded`);
-    this.model = this.loadSchema();
+    this.model = this.loadSchema(mainContainer.getDbService);
   }
-  abstract loadSchema(): Model;
+  abstract loadSchema(dbService: DbService): Model;
 }

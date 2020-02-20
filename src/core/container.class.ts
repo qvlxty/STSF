@@ -1,6 +1,7 @@
 import { BaseService } from "./base.service";
 import { Repository } from "./base.repository";
-import { Controller, HttpMethod } from "./base.controller";
+import { Controller } from "./base.controller";
+import { DbService } from "./services/db/db.service";
 
 interface IServiceStack {
   [key: string]: BaseService;
@@ -16,10 +17,32 @@ export class Container {
   private services: IServiceStack;
   private repositories: IRepositoryStack;
   private controllers: IControllerStack;
-  constructor() {
+  private dbService: DbService;
+  constructor(
+    {
+      controllers,
+      dbService
+    }: {
+      controllers?: typeof Controller[];
+      dbService?: typeof DbService;
+    } = null
+  ) {
+    this.controllers = {};
     this.services = {};
     this.repositories = {};
-    this.controllers = {};
+    if (dbService) this.installDbService(dbService);
+    if (controllers) this.loadControllers(controllers);
+  }
+
+  public installDbService(dbService) {
+    this.dbService = dbService;
+  }
+
+  get getDbService() {
+    if (this.dbService === null) {
+      console.error("[SERVER] Не настроен сервис обслуживания базы данных.");
+    }
+    return this.dbService;
   }
 
   public registerRepository(repository) {
@@ -69,7 +92,7 @@ export class Container {
     return this.controllers[type.name];
   };
 
-  public getAllRepos() : Repository<any>[] {
+  public getAllRepos(): Repository<any>[] {
     return Object.values(this.repositories);
   }
   // Функция обустраивает роутер методами всех контроллеров

@@ -1,12 +1,11 @@
-import { Container } from "../../core/container.class";
-import { DbService } from "../db/db.service";
+import { DbMysqlService } from "implements/db/db.mysql.service";
+import { Container } from "core/container.class";
 
 // Скрипт синхронизации схемы базы данных
 async function boot() {
-  const AppContainer = new Container();
-  const migrateService: DbService = AppContainer.getService(DbService);
-  await migrateService.syncSchema();
+  const AppContainer = new Container({ dbService: DbMysqlService });
+  await AppContainer.getDbService.syncSchema();
 }
-boot().then(()=>{
-    console.info('Db Schema Complete')
+boot().then(() => {
+  console.info("Db Schema Complete");
 });
