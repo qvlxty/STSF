@@ -1,30 +1,30 @@
 # Контроллер
 
+Контроллер представляет из себя программный слой, в котором идёт связывание конкретных роутов приложений с обслуживающими их сервисами.
+
 В данном файле приведён пример реализации контроллера с комментариями
 
 ```ts
-export class PostController extends Controller {
+export class UserController extends Controller {
   constructor(
-    e: Container,
-    // Таким образом можно подключить сторонний сервис
-    private readonly postService: PostService = e.getService(PostService)
+    c: Container,
+    private readonly userService: UserService = c.getService(UserService)
   ) {
-    super(e);
+    super(c);
   }
-
-  // Здесь настройка API префикса 
-  public controllerApiPrefix = "/main";
-
-  // Функция возвращающая настройку роутера
-  routes = (): IRoute[] => {
+  controllerApiPrefix = "/user";
+  routes(): IRoute[] {
     return [
       {
         method: HttpMethod.GET,
-        path: "/hello",
-        action: this.postService.helloWorld
+        action: this.getUsers,
+        path: "/list"
       }
     ];
-  };
-}
+  }
 
+  getUsers = async (req: Request, res: Response) => {
+    res.json(await this.userService.getUsers());
+  }
+}
 ```

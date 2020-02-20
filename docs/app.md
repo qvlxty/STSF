@@ -12,8 +12,11 @@
 const bootApp = function() {
   const expressApp = new AppExpress();
   const AppContainer = new Container();
+  // Чтобы схемы моделей подключились для работы, необходимо
+  // Регистрировать модели вручную
+  AppContainer.registerService(DbService);
   // Регистрация всех контроллеров, живущих в приложении
-  AppContainer.loadControllers([PostController]);
+  AppContainer.loadControllers([PostController, UserController]);
   AppContainer.loadRoutes(expressApp);
   const port = AppContainer.getService(ConfigService).config.get("port");
 
