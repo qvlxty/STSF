@@ -1,6 +1,7 @@
 import { Controller, IRoute, HttpMethod } from "../../../core/base.controller";
 import { Container } from "core/container.class";
 import { UserService } from "./user.service";
+import { Request, Response } from "express";
 
 export class UserController extends Controller {
   constructor(
@@ -14,9 +15,13 @@ export class UserController extends Controller {
     return [
       {
         method: HttpMethod.GET,
-        action: this.userService.getUsers,
+        action: this.getUsers,
         path: "/list"
       }
     ];
+  }
+
+  getUsers = async (req: Request, res: Response) => {
+    res.json(await this.userService.getUsers());
   }
 }
