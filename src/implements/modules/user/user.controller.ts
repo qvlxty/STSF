@@ -11,17 +11,15 @@ export class UserController extends Controller {
     super(c);
   }
   controllerApiPrefix = "/user";
-  routes(): IRoute[] {
-    return [
-      {
-        method: HttpMethod.GET,
-        action: this.getUsers,
-        path: "/list"
-      }
-    ];
-  }
+  routes = () => [
+    {
+      method: HttpMethod.GET,
+      action: this.getUsers,
+      path: "/list"
+    }
+  ];
 
   getUsers = async (req: Request, res: Response) => {
     res.json(await this.userService.getUsers());
-  }
+  };
 }

@@ -1,9 +1,0 @@
-{
-    "port": 8080,
-    "db": {
-        "host": "localhost",
-        "name": "root",
-        "password": "root",
-        "dbname": "tmp"
-    }
-}

@@ -14,13 +14,12 @@ export interface IRoute {
   action: (req, res) => any | Promise<any>;
 }
 
+export interface IMiddleware {}
+
 export abstract class Controller {
   // Префикс, используемый для обособления контроллеров
-  public controllerApiPrefix: string;
+  public controllerApiPrefix: string = "/";
   // Абстрактный метод, который настраивает роутинг
   public abstract routes(): IRoute[];
-  constructor(
-    private readonly mainContainer: Container,
-    apiPrefix: string = "/"
-  ) {}
+  constructor(private readonly mainContainer: Container) {}
 }
