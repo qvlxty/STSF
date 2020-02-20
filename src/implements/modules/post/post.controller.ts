@@ -1,6 +1,6 @@
-import { Controller, IRoute, HttpMethod } from "../../core/base.controller";
+import { Controller, IRoute, HttpMethod } from "../../../core/base.controller";
 import { PostService } from "./post.service";
-import { Container } from "../../core/container.class";
+import { Container } from "../../../core/container.class";
 
 export class PostController extends Controller {
   constructor(

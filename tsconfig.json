@@ -10,12 +10,8 @@
     "outDir": "./dist",
     "baseUrl": "./src/",
     "incremental": true,
-    "lib": [
-      "es2017",
-      "dom"
-    ]
+    "lib": ["es2017", "dom"]
   },
-  "exclude": [
-    "dist",
-  ]
+  "include": ["./src/**/**/*.ts"],
+  "exclude": ["dist"]
 }

@@ -6,7 +6,7 @@ import { ConfigSchema } from "./config.schema";
   Пример сервиса, который обслуживает конфиг
 */
 export class ConfigService extends BaseService {
-  private configData;
+  private configData: convict.Config<any>;
   constructor(e) {
     super(e);
     this.generateConfig();

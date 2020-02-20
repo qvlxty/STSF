@@ -1,12 +1,12 @@
 import { BaseService } from "./base.service";
-import { Model } from "./base.model";
+import { Repository } from "./base.repository";
 import { Controller, HttpMethod } from "./base.controller";
 
 interface IServiceStack {
   [key: string]: BaseService;
 }
-interface IModelStack {
-  [key: string]: Model<any>;
+interface IRepositoryStack {
+  [key: string]: Repository<any>;
 }
 interface IControllerStack {
   [key: string]: Controller;
@@ -14,16 +14,16 @@ interface IControllerStack {
 
 export class Container {
   private services: IServiceStack;
-  private models: IModelStack;
+  private repositories: IRepositoryStack;
   private controllers: IControllerStack;
   constructor() {
     this.services = {};
-    this.models = {};
+    this.repositories = {};
     this.controllers = {};
   }
 
-  public registerModel(model) {
-    this.models[model.name] = new model(this);
+  public registerRepository(repository) {
+    this.repositories[repository.name] = new repository(this);
   }
 
   public registerService(service) {
@@ -41,14 +41,14 @@ export class Container {
   }
 
   // ToDo: вскрыть на что можно заменить any (нужен указатель на класс)
-  public getModel = (type): Model<any> => {
+  public getRepository = (type): Repository<any> => {
     if (
-      this.models[type.name] === null ||
-      typeof this.models[type.name] === "undefined"
+      this.repositories[type.name] === null ||
+      typeof this.repositories[type.name] === "undefined"
     ) {
-      this.registerModel(type);
+      this.registerRepository(type);
     }
-    return this.models[type.name];
+    return this.repositories[type.name];
   };
   public getService = (type): any => {
     if (
@@ -69,6 +69,9 @@ export class Container {
     return this.controllers[type.name];
   };
 
+  public getAllRepos() : Repository<any>[] {
+    return Object.values(this.repositories);
+  }
   // Функция обустраивает роутер методами всех контроллеров
   public loadRoutes({ server, router, routeInstall }) {
     for (const iter of Object.values(this.controllers))
