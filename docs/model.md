@@ -10,96 +10,89 @@
 
 Репозитории созданы для обслуживания и описывания сложной бизнес логики для работы с моделями данных, или их mapping-а.
 
+В данном фреймворке по-умолчанию установлена sequelize ORM.
+
 Пример репозитория в модели:
 
 ```ts
-// post.repository.ts
-import { Repository } from "../../../core/base.repository";
-import sequelize = require("sequelize");
+// user.repository.ts
+import { DataTypes, Model } from "sequelize";
+import { DbMysqlService } from "implements/db/db.mysql.service";
+import { Repository } from "core/base.repository";
 
-class Post extends sequelize.Model {}
-export class PostRepository extends Repository<Post> {}
+export class User extends Model {}
+export class UserRepository extends Repository<typeof User> {
+  loadSchema(dbService: DbMysqlService) {
+    User.init(
+      {
+        login: DataTypes.STRING,
+        password: DataTypes.STRING,
+        role: DataTypes.INTEGER
+      },
+      { sequelize: dbService.dbConnection() }
+    );
+    return User;
+  }
+}
 ```
 
-## Миграция и синхронизация схемы
+## Миграция и синхронизация схемы 
 
-Схемы для миграции и синхронизацию можно запускать через скрипт
+Для синхронизации схем данных, необходимо загрузить все репозитории в файле **run.db.sync.ts**
+
+```
+// Скрипт синхронизации схемы базы данных
+async function boot() {
+  const AppContainer = new Container({ dbService: DbMysqlService });
+  // Загрузка сущностей для синхронизации схемы
+  AppContainer.loadRepositories([UserRepository]);
+  await AppContainer.getDbService.syncSchema();
+}
+boot().then(() => {
+  console.info("Db Schema Complete");
+  process.exit(0);
+});
+```
+
+Затем запустить команду 
 
 `npm run db:sync`
 
-Для описания схем исопльзуется файл **db/db.migration.service**.
-
-Схемы для описания сущностей хранятся в каталоге **db/schema**
-
-Ниже приведён пример для sequelize orm:
-
-```ts
-// db/schema/user.schema.ts
-import { DataTypes } from "sequelize";
-
-export const UserSchema = {
-  login: DataTypes.STRING,
-  password: DataTypes.STRING
-};
-
-// db.service.ts Создание User для sequelize
-export class DbService extends BaseService {
-
-  ...
-
-  public initModels(c: Container) {
-    console.info("[SERVER] Initial Models...");
-    User.init(UserSchema, { sequelize: this.connection });
-    c.getRepository(UserRepository).model = User;
-    console.info("[SERVER] Models loaded");
-  }
-
-// user.repository.ts в модуле user
-import { Repository } from "core/base.repository";
-import sequelize = require("sequelize");
-
-export class User extends sequelize.Model {}
-export class UserRepository extends Repository<typeof User> {}
-```
-
-Обратите внимание, что в конструкторе
-
-Для изящности все схемы всех таблиц можно выделить в отдельный каталог **db/schema\***. Используйте построение всего как вам будет удобней.
+Схемы подключатся из метода **LoadSchema();** каждого репозитория.
 
 ## Подключения к бд
 
-Ниже приведён пример сервиса, который хранит объект подключения к базе данных и загрузка данных из конфигурационного файла
+Сервис для подключения в БД можно реализовать самостоятельно для разного источника данных. Контейнер может хранить только один сервис подключения к базе данных. Ниже приведён пример подключения к **Mysql**.
 
 ```ts
-export class DbService extends BaseService {
-  private readonly connection;
-  get dbConnection() {
-    return this.connection;
-  }
+export class DbMysqlService extends DbService {
   constructor(
     c: Container,
     private readonly configService: ConfigService = c.getService(ConfigService)
   ) {
     super(c);
+  }
+
+  public setupConnection() {
     this.connection = new Sequelize(
-      configService.config.get("db.dbname"),
-      configService.config.get("db.name"),
-      configService.config.get("db.password"),
+      this.configService.config.get("db.dbname"),
+      this.configService.config.get("db.name"),
+      this.configService.config.get("db.password"),
       {
         dialect: "mysql"
       }
     );
   }
-}
+
 ```
 
-Это подключение можно получить в любой точке приложения через контейнер
+Это подключение можно получить в любой точке приложения через контейнер.
 
 ```ts
 export class TestService extends BaseService {
   constructor(
     c: Container,
-    private readonly connection = c.getService(DbService).dbConnection
+    private readonly connection = c.getDbService().dbConnection
   ) {
     super(c);
   }
@@ -108,3 +101,5 @@ export class TestService extends BaseService {
   }
 }
 ```
+
+В будущем планируется возможность создания множества подключений к базе данных.

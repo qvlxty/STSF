@@ -98,9 +98,6 @@ export class Container {
     return this.controllers[type.name];
   };
 
-  public getAllRepos(): Repository<any>[] {
-    return Object.values(this.repositories);
-  }
   // Функция обустраивает роутер методами всех контроллеров
   public loadRoutes({ server, router, routeInstall }) {
     for (const iter of Object.values(this.controllers))
