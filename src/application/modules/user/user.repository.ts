@@ -1,6 +1,6 @@
 import { DataTypes, Model } from "sequelize";
-import { DbMysqlService } from "implements/db/db.mysql.service";
-import { Repository } from "core/base.repository";
+import { DbMysqlService } from "application/db/db.mysql.service";
+import { Repository } from "frameworkCore/base.repository";
 
 export class User extends Model {}
 export class UserRepository extends Repository<typeof User> {

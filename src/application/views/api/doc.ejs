@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <title>Generated Doc</title>
+</head>
+
+<body class="d-flex flex-column h-100" style="min-height: 100vh;">
+    <div class="container flex-shrink-0">
+        <br />
+        <h1>Документация v0.1.0</h1>
+        <hr>
+        <% for (const iter of data) {%>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"> <strong>Pref: </strong><a href="#"><%= iter.prefix %> </a></li>
+        </ol>
+        <div class="card-deck">
+            <% for (const route of iter.routes) {
+                 %>
+            <div class="card border-primary mb-3" style="max-width: 20rem;">
+                <div class="card-header">
+                    <span class="badge badge-secondary"><%= route.method %></span>
+                    <a href="<%= iter.prefix %><%= route.path%>"><%= iter.prefix %><%= route.path%></a>
+                </div>
+                <div class="card-body">
+                    <p class="card-text"><%= route.description %></p>
+                    <hr>
+                    <p class="card-text">
+                        <% if (route.inData) { %>
+                        <p>Входные данные:</p>
+                        <code><%= JSON.stringify(route.inData); %></code>
+                        <% } %>
+                        <% if (route.outData) { %>
+                        <p>Выходные данные:</p>
+                        <p><code><%= JSON.stringify(route.outData); %></code></p>
+                        <% } %>
+                    </p>
+                </div>
+            </div>
+            <% } %>
+        </div>
+        <% } %>
+    </div>
+    <footer class="footer mt-auto py-3 bg-dark ">
+        <div class="container">
+            <span class="text-light">Разработано с использованием <a
+                    href="https://github.com/qvlxty/qContainer">qContainer</a></span>
+        </div>
+    </footer>
+</body>
+<style>
+    main>.container {
+        padding: 60px 15px 0;
+    }
+
+    .footer {
+        background-color: #f5f5f5;
+    }
+
+    .footer>.container {
+        padding-right: 15px;
+        padding-left: 15px;
+    }
+
+    code {
+        font-size: 80%;
+    }
+</style>
+
+</html>

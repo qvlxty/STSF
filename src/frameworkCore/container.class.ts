@@ -2,6 +2,7 @@ import { BaseService } from "./base.service";
 import { Repository } from "./base.repository";
 import { Controller } from "./base.controller";
 import { DbService } from "./services/db/db.service";
+import { AppExpress } from "./app.facade";
 
 interface IServiceStack {
   [key: string]: BaseService;
@@ -99,8 +100,16 @@ export class Container {
   };
 
   // Функция обустраивает роутер методами всех контроллеров
-  public loadRoutes({ server, router, routeInstall }) {
-    for (const iter of Object.values(this.controllers))
+  public loadRoutes({ routeInstall, middlewareInstall }: AppExpress) {
+    for (const iter of Object.values(this.controllers)) {
+      for (const m of iter.middlewares()) middlewareInstall(m);
       for (const r of iter.routes()) routeInstall(r, iter.controllerApiPrefix);
+    }
   }
+  // Возвращает все роуты в контейнере
+  public getAllRoutes = () =>
+    Object.values(this.controllers).map(el => ({
+      prefix: el.controllerApiPrefix,
+      routes: el.routes()
+    }));
 }

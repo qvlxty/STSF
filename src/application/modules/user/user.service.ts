@@ -1,5 +1,5 @@
-import { BaseService } from "../../../core/base.service";
-import { Container } from "../../../core/container.class";
+import { BaseService } from "../../../frameworkCore/base.service";
+import { Container } from "../../../frameworkCore/container.class";
 import { UserRepository } from "./user.repository";
 
 export class UserService extends BaseService {

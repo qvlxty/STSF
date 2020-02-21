@@ -1,7 +1,12 @@
 import { UserService } from "./user.service";
 import { Request, Response } from "express";
-import { Container } from "core/container.class";
-import { Controller, HttpMethod } from "core/base.controller";
+import { Container } from "frameworkCore/container.class";
+import {
+  Controller,
+  HttpMethod,
+  IRoute,
+  IMiddleware
+} from "frameworkCore/base.controller";
 
 export class UserController extends Controller {
   constructor(
@@ -11,7 +16,7 @@ export class UserController extends Controller {
     super(c);
   }
   controllerApiPrefix = "/user";
-  routes = () => [
+  routes = (): IRoute[] => [
     {
       method: HttpMethod.GET,
       action: this.getUsers,
@@ -19,7 +24,19 @@ export class UserController extends Controller {
     }
   ];
 
+  middlewares = (): IMiddleware[] => [
+    {
+      paths: ["/list"],
+      uses: [
+        (req, res, next) => {
+          req.msg = "hello world";
+          next();
+        }
+      ]
+    }
+  ];
+
   getUsers = async (req: Request, res: Response) => {
-    res.json(await this.userService.getUsers());
+    res.render("user/index", await this.userService.getUsers());
   };
 }

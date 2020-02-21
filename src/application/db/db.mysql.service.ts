@@ -1,7 +1,7 @@
 import { Sequelize } from "sequelize";
-import { DbService } from "core/services/db/db.service";
-import { ConfigService } from "core/services/config/config.service";
-import { Container } from "core/container.class";
+import { DbService } from "frameworkCore/services/db/db.service";
+import { ConfigService } from "frameworkCore/services/config/config.service";
+import { Container } from "frameworkCore/container.class";
 
 export class DbMysqlService extends DbService {
   constructor(

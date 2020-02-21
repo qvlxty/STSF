@@ -1,5 +1,5 @@
 import * as Express from "express";
-import { IRoute, HttpMethod } from "./base.controller";
+import { IRoute, HttpMethod, IMiddleware } from "./base.controller";
 
 interface ISettings {
   viewEngine?: string; // Шаблонизатор
@@ -28,6 +28,8 @@ export abstract class App {
 
   // Функция для установки роутов в приложение/библиотеку
   abstract routeInstall = (route: IRoute) => {};
+  // Функция для установки мидлвары в приложение/библиотеку
+  abstract middlewareInstall = (middleware: IMiddleware) => {};
   // Функция для настройки приложения/библиотеки
   abstract setupApp = (settings: ISettings) => {};
 }
@@ -40,20 +42,24 @@ export class AppExpress extends App {
   constructor(server = Express(), router: Express.Router = Express.Router()) {
     super(server, router);
     server.use(router);
+    this.setupApp({});
   }
 
   setupApp = ({
-    viewEngine,
-    modules,
-    staticFolders,
-    viewCatalog
+    viewEngine = "ejs",
+    modules = [],
+    staticFolders = [],
+    viewCatalog = "src/application/views"
   }: ISettings) => {
-    if (viewEngine !== null) this.server.set("view engine", viewEngine);
-    if (modules !== null) for (const iter of modules) this.server.use(iter);
-    if (staticFolders !== null)
+    if (typeof viewEngine !== undefined && viewEngine !== null)
+      this.server.set("view engine", viewEngine);
+    if (typeof modules !== undefined && modules !== null)
+      for (const iter of modules) this.server.use(iter);
+    if (typeof staticFolders !== undefined && staticFolders !== null)
       for (const iter of staticFolders)
         this.server.use(iter.path, Express.static(iter.path));
-    if (viewCatalog !== null) this.server.set("views", viewCatalog);
+    if (typeof viewCatalog !== undefined && viewCatalog !== null)
+      this.server.set("views", viewCatalog);
   };
 
   routeInstall = (r: IRoute, controllerPrefix: string = "") => {
@@ -73,6 +79,14 @@ export class AppExpress extends App {
       case HttpMethod.DELETE:
         this.router.delete(`${controllerPrefix}${r.path}`, r.action);
         break;
+    }
+  };
+
+  middlewareInstall = (m: IMiddleware) => {
+    for (const p of m.paths) {
+      for (const u of m.uses) {
+        this.router.use(p, u);
+      }
     }
   };
 }
