@@ -5,8 +5,8 @@
   "main": "main.js",
   "scripts": {
     "start": "tsc-watch -p tsconfig.json --onSuccess \"cross-env NODE_PATH=dist/ node dist/main.js\"",
-    "db:sync": "tsc && node dist/implements/scripts/run.db.sync.js",
-    "db:seed": "tsc && node dist/implements/scripts/run.seed.js"
+    "db:sync": "tsc-watch -p tsconfig.json --onSuccess \"cross-env NODE_PATH=dist/ node dist/implements/scripts/run.db.sync.js\"",
+    "db:seed": "tsc-watch -p tsconfig.json --onSuccess \"cross-env NODE_PATH=dist/ node dist/implements/scripts/run.seed.js\""
   },
   "author": "qualixity",
   "license": "ISC",

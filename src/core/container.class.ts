@@ -35,7 +35,7 @@ export class Container {
   }
 
   public installDbService(dbService) {
-    this.dbService = dbService;
+    this.dbService = new dbService(this);
   }
 
   get getDbService() {
@@ -60,6 +60,12 @@ export class Container {
   public loadControllers(controllers: any[]) {
     for (const c of controllers) {
       this.registerController(c);
+    }
+  }
+
+  public loadRepositories(repos: any[]) {
+    for (const c of repos) {
+      this.registerRepository(c);
     }
   }
 
