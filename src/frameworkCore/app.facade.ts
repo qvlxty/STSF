@@ -82,10 +82,10 @@ export class AppExpress extends App {
     }
   };
 
-  middlewareInstall = (m: IMiddleware) => {
+  middlewareInstall = (m: IMiddleware, prefix: string = "") => {
     for (const p of m.paths) {
       for (const u of m.uses) {
-        this.router.use(p, u);
+        this.router.use(`${prefix}${p}`, u);
       }
     }
   };

@@ -19,6 +19,14 @@ export class UserController extends Controller {
   routes = (): IRoute[] => [
     {
       method: HttpMethod.GET,
+      action: (req, res) => {
+        console.info(req.msg)
+        res.send(req.msg);
+      },
+      path: "/helloWorld"
+    },
+    {
+      method: HttpMethod.GET,
       action: this.getUsers,
       path: "/list"
     }
@@ -26,10 +34,10 @@ export class UserController extends Controller {
 
   middlewares = (): IMiddleware[] => [
     {
-      paths: ["/list"],
+      paths: ["/list","/helloWorld"],
       uses: [
         (req, res, next) => {
-          req.msg = "hello world";
+          req.msg = "hello world"
           next();
         }
       ]
