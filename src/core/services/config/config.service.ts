@@ -15,7 +15,7 @@ export class ConfigService extends BaseService {
     return this.configData;
   }
   private generateConfig = () => {
-    console.info('[SERVER] Loading Config...')
+    console.info("\x1b[32m%s\x1b[0m",'[SERVER] Загрузка конфигураций...')
     this.configData = convict(ConfigSchema);
     this.configData.loadFile("config.json");
     this.configData.validate({ allowed: "strict" });
