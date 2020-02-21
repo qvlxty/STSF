@@ -39,8 +39,8 @@ export class UserRepository extends Repository<typeof User> {
 ## Миграция и синхронизация схемы 
 
 Для синхронизации схем данных, необходимо загрузить все репозитории в файле **run.db.sync.ts**
-
-```
+ 
+```ts
 // Скрипт синхронизации схемы базы данных
 async function boot() {
   const AppContainer = new Container({ dbService: DbMysqlService });
@@ -58,7 +58,11 @@ boot().then(() => {
 
 `npm run db:sync`
 
+Это всё.
+
 Схемы подключатся из метода **LoadSchema();** каждого репозитория.
+
+Поддержка миграция в процессе...
 
 ## Подключения к бд
 
