@@ -39,7 +39,7 @@ export abstract class App {
 */
 
 export class AppExpress extends App {
-  constructor(server = Express(), router: Express.Router = Express.Router()) {
+  constructor(server: Express.Application = Express(), router: Express.Router = Express.Router()) {
     super(server, router);
     server.use(router);
     this.setupApp({});
@@ -54,7 +54,7 @@ export class AppExpress extends App {
     if (typeof viewEngine !== undefined && viewEngine !== null)
       this.server.set("view engine", viewEngine);
     if (typeof modules !== undefined && modules !== null)
-      for (const iter of modules) this.server.use(iter);
+      for (const iter of modules) this.router.use(iter);
     if (typeof staticFolders !== undefined && staticFolders !== null)
       for (const iter of staticFolders)
         this.server.use(iter.path, Express.static(iter.path));

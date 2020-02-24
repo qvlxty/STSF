@@ -102,7 +102,8 @@ export class Container {
   // Функция обустраивает роутер методами всех контроллеров
   public loadRoutes({ routeInstall, middlewareInstall }: AppExpress) {
     for (const iter of Object.values(this.controllers)) {
-      for (const m of iter.middlewares()) middlewareInstall(m,iter.controllerApiPrefix);
+      for (const m of iter.middlewares())
+        middlewareInstall(m, iter.controllerApiPrefix);
       for (const r of iter.routes()) routeInstall(r, iter.controllerApiPrefix);
     }
   }

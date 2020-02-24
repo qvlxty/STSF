@@ -26,7 +26,5 @@ export class DbMysqlService extends DbService {
     await this.dbConnection().sync();
   };
 
-  async mainMigrate() {
-    // Подключать классы миграции сюда
-  }
+
 }

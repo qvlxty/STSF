@@ -23,7 +23,7 @@ export interface IRoute {
 }
 
 export interface IMiddleware {
-  uses: [(req, res, next) => any];
+  uses: ((req, res, next) => any)[];
   paths: string[];
 }
 
