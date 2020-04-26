@@ -6,6 +6,7 @@
         "name": "root",
         "password": "root",
         "dbname": "tmp",
-        "port": 3306
+        "port": 3306,
+        "entities": ["**/**.entity.js"]
     }
 }

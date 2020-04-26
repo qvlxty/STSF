@@ -30,11 +30,14 @@ export class PassportService extends BaseService {
         passwordField: "password"
       },
       async (username, password, done) => {
-        const user: any = await this.userService.getUserByLogin(username, [
-          "id",
-          "login",
-          "password"
-        ]);
+        const user = {
+          password: "Kek",
+        };
+        // const user: any = await this.userService.getUserByLogin(username, [
+        //   "id",
+        //   "login",
+        //   "password"
+        // ]);
         if (user === null) {
           done("Login invalid");
           return;

@@ -1,14 +1,11 @@
 import { BaseService } from "./base.service";
-import { Repository } from "./base.repository";
 import { Controller } from "./base.controller";
 import { DbService } from "./services/db/db.service";
 import { AppExpress } from "./app.facade";
+import { Connection, Repository, ObjectType, EntitySchema } from "typeorm";
 
 interface IServiceStack {
   [key: string]: BaseService;
-}
-interface IRepositoryStack {
-  [key: string]: Repository<any>;
 }
 interface IControllerStack {
   [key: string]: Controller;
@@ -16,22 +13,16 @@ interface IControllerStack {
 
 export class Container {
   private services: IServiceStack;
-  private repositories: IRepositoryStack;
   private controllers: IControllerStack;
   private dbService: DbService;
-  constructor(
-    {
-      controllers,
-      dbService
-    }: {
-      controllers?: typeof Controller[];
-      dbService?: typeof DbService;
-    } = null
-  ) {
+  constructor() {
     this.controllers = {};
     this.services = {};
-    this.repositories = {};
-    if (dbService) this.installDbService(dbService);
+    this.installDbService(DbService);
+  }
+
+  async init(controllers?) {
+    await this.initDbConnection();
     if (controllers) this.loadControllers(controllers);
   }
 
@@ -39,15 +30,28 @@ export class Container {
     this.dbService = new dbService(this);
   }
 
-  get getDbService() {
+  get getDbService(): DbService {
     if (this.dbService === null) {
       console.error("[SERVER] Не настроен сервис обслуживания базы данных.");
     }
     return this.dbService;
   }
 
-  public registerRepository(repository) {
-    this.repositories[repository.name] = new repository(this);
+  get getConnection(): Connection {
+    return this.getDbService.connection;
+  }
+  async initDbConnection() {
+    console.info(
+      "\x1b[36m%s\x1b[0m", "[SERVER] Подключение к бд создано");
+    await this.dbService.setupConnection();
+  }
+
+  /*
+    Входные параметры:
+    @RepoClass - Указатель на класс репозитория
+  */
+  public getRepository<Entity>(target: ObjectType<Entity> | EntitySchema<Entity> | string): Repository<Entity> {
+    return this.getConnection.getRepository(target);
   }
 
   public registerService(service) {
@@ -64,22 +68,6 @@ export class Container {
     }
   }
 
-  public loadRepositories(repos: any[]) {
-    for (const c of repos) {
-      this.registerRepository(c);
-    }
-  }
-
-  // ToDo: вскрыть на что можно заменить any (нужен указатель на класс)
-  public getRepository = (type): Repository<any> => {
-    if (
-      this.repositories[type.name] === null ||
-      typeof this.repositories[type.name] === "undefined"
-    ) {
-      this.registerRepository(type);
-    }
-    return this.repositories[type.name];
-  };
   public getService = (type): any => {
     if (
       this.services[type.name] === null ||

@@ -1,19 +1,18 @@
 import { BaseService } from "../../../frameworkCore/base.service";
 import { Container } from "../../../frameworkCore/container.class";
-import { UserRepository, User } from "./user.repository";
+import { User } from "../user.entity";
 
 export class UserService extends BaseService {
   constructor(
     c: Container,
-    private readonly userRepository: UserRepository = c.getRepository(
-      UserRepository
-    )
+    private readonly connection = c.getConnection,
+    private readonly userRepository = c.getRepository(User)
   ) {
     super(c);
   }
 
   authUser = (login, password): Promise<number> => {
-    return this.userRepository.model.count({
+    return this.connection.getRepository(User).count({
       where: {
         login,
         password
@@ -22,27 +21,26 @@ export class UserService extends BaseService {
   };
 
   getUserById = (id: number): Promise<User | null> =>
-    this.userRepository.model.findOne({
+    this.userRepository.findOne({
       where: { id },
-      attributes: ["id", "login"]
+      select: ["id", "login"]
     });
 
   getUserByLogin = (
     login: string,
-    attributes: string[] = ["id", "login"]
   ): Promise<User | null> =>
-    this.userRepository.model.findOne({
+    this.userRepository.findOne({
+      select: ["id", "login"],
       where: { login },
-      attributes
     });
 
-  createUser = () => {
-    return this.userRepository.model.create({
-      login: "admin",
-      password: "123456"
-    });
-  };
-  getUsers = () => {
-    return this.userRepository.model.findAll();
-  };
+  // createUser = () => {
+  //   return this.userRepository.model.create({
+  //     login: "admin",
+  //     password: "123456"
+  //   });
+  // };
+  // getUsers = () => {
+  //   return this.userRepository.model.findAll();
+  // };
 }

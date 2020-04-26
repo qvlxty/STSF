@@ -26,6 +26,21 @@ export const ConfigSchema = {
       doc: "Database name",
       format: String,
       default: "qnote"
+    },
+    port: {
+      doc: "Database port",
+      format: Number,
+      default: 3306
+    },
+    type: {
+      doc: "Database type",
+      format: String,
+      default: "mysql"
+    },
+    entities: {
+      doc: "Entities Path",
+      format: Array,
+      default: ["**/**.entity.js"]
     }
   }
 };

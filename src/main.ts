@@ -2,14 +2,13 @@ import { AppExpress, App } from "./frameworkCore/app.facade";
 import { Container } from "./frameworkCore/container.class";
 import { ConfigService } from "./frameworkCore/services/config/config.service";
 import { UserController } from "./application/modules/user/user.controller";
-import { DbMysqlService } from "./application/db/db.mysql.service";
 import { ApiController } from "frameworkCore/services/apiGenerate/api.controller";
 import { PassportService } from "application/passport/passport.service";
 import passport = require("passport");
 import bodyParser = require("body-parser");
 import expressSession = require("express-session");
 
-const bootApp = function() {
+const bootApp = async function () {
   const expressApp = new AppExpress();
 
   // Для работы PassportJS
@@ -21,10 +20,8 @@ const bootApp = function() {
       bodyParser.urlencoded({ extended: true }),
     ]
   });
-  const AppContainer = new Container({
-    controllers: [UserController, ApiController],
-    dbService: DbMysqlService
-  });
+  const AppContainer = new Container()
+  await AppContainer.init([UserController, ApiController]);
   AppContainer.loadRoutes(expressApp);
   AppContainer.registerService(PassportService);
 

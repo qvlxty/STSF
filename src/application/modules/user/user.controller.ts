@@ -56,6 +56,6 @@ export class UserController extends Controller {
 
   getUsers = async (req: Request, res: Response) => {
     console.log(req.user);
-    res.render("user/index", await this.userService.getUsers());
+    // res.render("user/index", await this.userService.getUsers());
   };
 }

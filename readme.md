@@ -1,4 +1,5 @@
-# qCcontainer
+# Small TS Framework (STSF)
+
 
 ![](https://img.shields.io/badge/express-4.17-green)
 ![](https://img.shields.io/badge/ejs-3.0-yellow)
@@ -13,7 +14,6 @@
 - Автоматическое создание зависимостей, если их нет, и их разрешение
 - Сервис конфигов из коробки
 - Сервис работы с БД (Возможность подключать разные источники данных)
-- Плавающая архитектура, возможность подключить различные ORM (TypeOrm/Sequelize)
 - Возможность автогенерации документации API 
 - Гибкая настройка Middleware на наборы роутов
 
@@ -34,7 +34,7 @@
 - [Экземпляр приложения](docs/app.md)
 - [Контроллер и Middleware](docs/controller.md)
 - [Сервисы](docs/service.md)
-- [Модели и репозитории](docs/model.md)
+- [Сущности и репозитории](docs/model.md)
 
 ### Digging deeper
 
@@ -50,10 +50,12 @@
 
 ## Current ver.
 
-v 0.1.1
+v 0.1.2
 
-- В ядро установлен сервис Passport
-- Seed и дока по нему
+- Полностью убран Sequelize
+- Убран MysqlDbService
+- Используется тесно TypeORM
+- Необходимая мера entry point приложения делать как async функцию, чтоб инициализовать подключение
 
 ## Backlog
 

@@ -1,12 +1,9 @@
-import { DbMysqlService } from "application/db/db.mysql.service";
 import { Container } from "frameworkCore/container.class";
-import { UserRepository } from "application/modules/user/user.repository";
-import { PostRepository } from "application/modules/post/post.repository";
 import { DbSeedService } from "application/db/db.seed.service";
 
 // Скрипт синхронизации схемы базы данных
 async function boot() {
-  const AppContainer = new Container({ dbService: DbMysqlService });
+  const AppContainer = new Container();
   try {
     await AppContainer.getService(DbSeedService)[process.argv[2]]();
   } catch (err) {
