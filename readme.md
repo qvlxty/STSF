@@ -26,7 +26,7 @@
 
 Настроить config.json
 
-`npm run start`
+`npm run start:dev`
 
 ## Дока
 
