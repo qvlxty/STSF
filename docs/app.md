@@ -4,11 +4,13 @@
 
 **upd v 0.1.0**
 
-Теперь фреймворк использует только express и шаблонизатор ejs 
+Теперь фреймворк использует только express и шаблонизатор ejs.
+Но если очень хочется - можете написать свои реализации, наследуая App класс из ``frameworkCore/app.facade.ts``
 
 Приложение создается с помощью класса-фасада **App**.
 Затем необходимо произвести загрузку всех доступных контроллеров в DI контейнер.
 После чего, необходимо передать сервер контейнеру, чтобы он мог настроить все доступные роуты.
+
 
 Пример создания приложения описан ниже
 
@@ -16,20 +18,23 @@
 const bootApp = function() {
   const expressApp = new AppExpress();
   const AppContainer = new Container();
-  // Чтобы схемы моделей подключились для работы, необходимо
-  // Регистрировать модели вручную
-  AppContainer.registerService(DbService);
-  // Регистрация всех контроллеров, живущих в приложении
-  AppContainer.loadControllers([PostController, UserController]);
-  AppContainer.loadRoutes(expressApp);
+  // Функция инициализации базовых сервисов и контроллеров
+  await AppContainer.init({
+    controllers:[UserController, ApiController],
+    services: [PassportService],
+    app: expressApp
+  });
   const port = AppContainer.getService(ConfigService).config.get("port");
-
   expressApp.server.listen(port || 3000, () => {
     console.info("[SERVER] started!");
   });
 };
 bootApp();
 ```
+Чтобы корректно и правильно инициализировать контейнер, не забывайте функцию init. Она создает БД подключения, 
+регистрирует начальные сервисы и контроллеры.
+
+Если вам потребуется отдельно зарегистрировать независимый контроллер, то вы можете пользоваться методом ``loadControllers(class[])``.
 
 ## Настройка приложения
 

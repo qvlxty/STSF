@@ -27,9 +27,9 @@ export abstract class App {
   }
 
   // Функция для установки роутов в приложение/библиотеку
-  abstract routeInstall = (route: IRoute) => {};
+  abstract routeInstall = (route: IRoute, controllerPrefix: string = "") => {};
   // Функция для установки мидлвары в приложение/библиотеку
-  abstract middlewareInstall = (middleware: IMiddleware) => {};
+  abstract middlewareInstall = (middleware: IMiddleware, prefix: string = "") => {};
   // Функция для настройки приложения/библиотеки
   abstract setupApp = (settings: ISettings) => {};
 }
@@ -50,7 +50,7 @@ export class AppExpress extends App {
     modules = [],
     staticFolders = [],
     viewCatalog = "src/application/views"
-  }: ISettings) => {
+  }: ISettings)  => {
     if (typeof viewEngine !== undefined && viewEngine !== null)
       this.server.set("view engine", viewEngine);
     if (typeof modules !== undefined && modules !== null)

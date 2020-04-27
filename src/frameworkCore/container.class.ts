@@ -1,8 +1,8 @@
 import { BaseService } from "./base.service";
 import { Controller } from "./base.controller";
 import { DbService } from "./services/db/db.service";
-import { AppExpress } from "./app.facade";
-import { Connection, Repository, ObjectType, EntitySchema } from "typeorm";
+import { App } from './app.facade'
+import { TypeormDBService } from "./services/db/ORM/typeorm.db.service";
 
 interface IServiceStack {
   [key: string]: BaseService;
@@ -18,11 +18,29 @@ export class Container {
   constructor() {
     this.controllers = {};
     this.services = {};
-    this.installDbService(DbService);
   }
 
-  async init(controllers?) {
+  async init(
+    {
+      controllers = null,
+      services = null,
+      dbService = TypeormDBService,
+      app = null
+    }
+      : {
+        controllers?: any[],
+        services?: any[],
+        dbService?: typeof DbService,
+        app?: App
+      }
+  ) {
+    this.installDbService(dbService);
     await this.initDbConnection();
+    if (services) 
+      for (const iter of services) {
+        this.registerService(iter);
+      }
+    if (app) this.loadRoutes(app);
     if (controllers) this.loadControllers(controllers);
   }
 
@@ -37,12 +55,12 @@ export class Container {
     return this.dbService;
   }
 
-  get getConnection(): Connection {
+  get getConnection() {
     return this.getDbService.connection;
   }
   async initDbConnection() {
     console.info(
-      "\x1b[36m%s\x1b[0m", "[SERVER] Подключение к бд создано");
+      "\x1b[36m%s\x1b[0m", "[SERVER] Подключение к БД создано");
     await this.dbService.setupConnection();
   }
 
@@ -50,7 +68,7 @@ export class Container {
     Входные параметры:
     @RepoClass - Указатель на класс репозитория
   */
-  public getRepository<Entity>(target: ObjectType<Entity> | EntitySchema<Entity> | string): Repository<Entity> {
+  public getRepository<Entity>(target: any) {
     return this.getConnection.getRepository(target);
   }
 
@@ -88,7 +106,7 @@ export class Container {
   };
 
   // Функция обустраивает роутер методами всех контроллеров
-  public loadRoutes({ routeInstall, middlewareInstall }: AppExpress) {
+  public loadRoutes({ routeInstall, middlewareInstall }: App) {
     for (const iter of Object.values(this.controllers)) {
       for (const m of iter.middlewares())
         middlewareInstall(m, iter.controllerApiPrefix);

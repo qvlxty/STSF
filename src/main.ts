@@ -21,9 +21,11 @@ const bootApp = async function () {
     ]
   });
   const AppContainer = new Container()
-  await AppContainer.init([UserController, ApiController]);
-  AppContainer.loadRoutes(expressApp);
-  AppContainer.registerService(PassportService);
+  await AppContainer.init({
+    controllers:[UserController, ApiController],
+    services: [PassportService],
+    app: expressApp
+  });
 
   const port = AppContainer.getService(ConfigService).config.get("port");
   expressApp.server.listen(port || 3000, () => {

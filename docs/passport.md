@@ -60,7 +60,7 @@ export class UserService extends BaseService {
   }
 
   authUser = (login, password): Promise<number> => {
-    return this.userRepository.model.count({
+    return this.userRepository.count({
       where: {
         login,
         password
@@ -191,21 +191,20 @@ export class UserService extends BaseService {
 
   getUserByLogin = (
     login: string,
-    attributes: string[] = ["id", "login"]
   ): Promise<User | null> =>
-    this.userRepository.model.findOne({
+    this.userRepository.findOne({
       where: { login },
-      attributes
+      select: ["id","login"]
     });
 
   createUser = () => {
-    return this.userRepository.model.create({
+    return this.userRepository.save({
       login: "admin",
       password: "123456"
     });
   };
   getUsers = () => {
-    return this.userRepository.model.findAll();
+    return this.userRepository.findAll();
   };
 }
 ```
