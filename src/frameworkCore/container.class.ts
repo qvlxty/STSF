@@ -36,12 +36,12 @@ export class Container {
   ) {
     this.installDbService(dbService);
     await this.initDbConnection();
-    if (services) 
+    if (services)
       for (const iter of services) {
         this.registerService(iter);
       }
-    if (app) this.loadRoutes(app);
     if (controllers) this.loadControllers(controllers);
+    if (app) this.loadRoutes(app);
   }
 
   public installDbService(dbService) {
