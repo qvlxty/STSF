@@ -1,29 +1,11 @@
 import { AppExpress, App } from "./frameworkCore/app.facade";
 import { Container } from "./frameworkCore/container.class";
 import { ConfigService } from "./frameworkCore/services/config/config.service";
-import { UserController } from "./application/modules/user/user.controller";
-import { ApiController } from "frameworkCore/services/apiGenerate/api.controller";
-import { PassportService } from "application/passport/passport.service";
-import passport = require("passport");
-import bodyParser = require("body-parser");
-import expressSession = require("express-session");
 
 const bootApp = async function () {
   const expressApp = new AppExpress();
-
-  // Для работы PassportJS
-  expressApp.setupApp({
-    modules: [
-      expressSession({ secret: "cats", resave: false, saveUninitialized: true }),
-      passport.initialize(),
-      passport.session(),
-      bodyParser.urlencoded({ extended: true }),
-    ]
-  });
   const AppContainer = new Container()
   await AppContainer.init({
-    controllers:[UserController, ApiController],
-    services: [PassportService],
     app: expressApp
   });
 
