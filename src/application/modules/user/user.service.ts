@@ -1,6 +1,6 @@
 import { BaseService } from "../../../frameworkCore/base.service";
 import { Container } from "../../../frameworkCore/container.class";
-import { User } from "../user.entity";
+import { User } from "./user.entity";
 
 export class UserService extends BaseService {
   constructor(
@@ -34,13 +34,13 @@ export class UserService extends BaseService {
       where: { login },
     });
 
-  // createUser = () => {
-  //   return this.userRepository.model.create({
-  //     login: "admin",
-  //     password: "123456"
-  //   });
-  // };
-  // getUsers = () => {
-  //   return this.userRepository.model.findAll();
-  // };
+  createUser = () => {
+    return this.userRepository.create({
+      login: "admin",
+      password: "123456"
+    });
+  };
+  getUsers = () => {
+    return this.userRepository.findAll();
+  };
 }

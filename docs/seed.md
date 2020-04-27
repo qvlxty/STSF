@@ -9,12 +9,12 @@
 ```ts
 // db.seed.service.ts 
 export class DbSeedService extends BaseService {
-  constructor(
-    c: Container,
-    // Загрузка необходимых для сидинга репозиториев
-    private readonly userRepository: UserRepository = c.getRepository(
-      UserRepository
-    )
+   constructor(
+    c: Container, 
+    // Получение подключения
+    private readonly connection: Connection = c.getConnection,
+    // Получение пользовательского репозитория через подключение
+    private readonly userRepo: Repository<User> = connection.getRepository(User)
   ) {
     super(c);
   }

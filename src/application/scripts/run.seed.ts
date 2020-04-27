@@ -4,6 +4,7 @@ import { DbSeedService } from "application/db/db.seed.service";
 // Скрипт синхронизации схемы базы данных
 async function boot() {
   const AppContainer = new Container();
+  await AppContainer.init({});
   try {
     await AppContainer.getService(DbSeedService)[process.argv[2]]();
   } catch (err) {
@@ -17,6 +18,7 @@ boot().then(() => {
   if (process.argv.length < 2) {
     console.error('[ERROR] Вы не указали функцию seed данных')
   } else {
-    console.error(`[ERROR] Функция ${process.argv[2]} не найдена!`)
+    console.error(`[ERROR] Функция ${process.argv[2]} не найдена/или произошла другая ошибка:`)
+    console.error(err);
   }
 });

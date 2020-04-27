@@ -20,8 +20,7 @@ const bootApp = function() {
   const AppContainer = new Container();
   // Функция инициализации базовых сервисов и контроллеров
   await AppContainer.init({
-    controllers:[UserController, ApiController],
-    services: [PassportService],
+    controllers:[UserController],
     app: expressApp
   });
   const port = AppContainer.getService(ConfigService).config.get("port");

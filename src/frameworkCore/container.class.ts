@@ -100,7 +100,7 @@ export class Container {
       this.controllers[type.name] === null ||
       typeof this.controllers[type.name] === "undefined"
     ) {
-      // this.registerController(type);
+      this.registerController(type);
     }
     return this.controllers[type.name];
   };

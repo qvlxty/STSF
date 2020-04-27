@@ -14,5 +14,6 @@ export abstract class  DbService extends BaseService {
   public connection: any = null;
   // Функция для настройки подключения 
   public abstract async setupConnection();
+  public abstract async syncSchema();
 
 }
