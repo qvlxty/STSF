@@ -8,7 +8,15 @@
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <title>Generated Doc</title>
 </head>
-
+<%
+const httpMethod = {
+    'GET':"primary",
+    'POST':"dark",
+    'PATCH':"success",
+    'UPDATE':"info",
+    'DELETE':"danger"
+  }
+%>
 <body class="d-flex flex-column h-100" style="min-height: 100vh;">
     <div class="container flex-shrink-0">
         <br />
@@ -24,7 +32,7 @@
         <p>
             <div class="alert alert-primary">
                 <a href="#" onclick="toggleDescription(<%= methodCount %>)">
-                    <span class="badge badge-dark"><%= route.method %></span>
+                    <span class="badge badge-<%= httpMethod[route.method] %>"><%= route.method %></span>
                     <%= iter.prefix %><%= route.path%>
                 </a>
             </div>
