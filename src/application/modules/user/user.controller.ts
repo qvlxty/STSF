@@ -9,9 +9,9 @@ import {
 } from "frameworkCore/base.controller";
 import passport = require("passport");
 import { PassportService } from "application/passport/passport.service";
-import { ControllerPrefix } from "frameworkCore/decorators/controller.decorator";
+import { ControllerApiPrefix, ApiMethod } from "frameworkCore/decorators/controller.decorator";
 
-@ControllerPrefix('/user')
+@ControllerApiPrefix('/user')
 export class UserController extends Controller {
   constructor(
     c: Container,
@@ -22,26 +22,26 @@ export class UserController extends Controller {
   ) {
     super(c);
   }
-  routes = (): IRoute[] => [
-    {
-      method: HttpMethod.GET,
-      action: (req, res) => {
-        res.send("hello world");
-      },
-      path: "/helloWorld"
-    },
-    {
-      method: HttpMethod.POST,
-      action: (req, res) => {
-        res.send("hello");
-      },
-      path: "/auth",
-      description: "Метод для аутентификации :-)",
-      inData: { login: "user", password: "qwerty" },
-      outData:
-        "400 ошибка, если запрос неверен. 200 Если вход успешен. 401 если креды неправильные"
-    }
-  ];
+
+  @ApiMethod(
+    HttpMethod.GET, 
+    '/hello',
+    'Роут для отображения фразы HelloWorld'
+  )
+  helloWorld(req, res) {
+    res.send("helloWorld");
+  }
+
+  @ApiMethod(
+    HttpMethod.POST,
+    '/auth',
+    'Метод для аутентификации',
+    { login: "user", password: "qwerty" },
+    "400 ошибка, если запрос неверен. 200 Если вход успешен. 401 если креды неправильные"
+  )
+  auth(req,res) {
+    res.send('hello');
+  }
 
   middlewares = (): IMiddleware[] => [
     {
@@ -54,8 +54,8 @@ export class UserController extends Controller {
     }
   ];
 
-  getUsers = async (req: Request, res: Response) => {
-    console.log(req.user);
-    // res.render("user/index", await this.userService.getUsers());
-  };
+  // @ApiMethod(HttpMethod.GET, )
+  // public getUsers (req: Request, res: Response) => {
+  //   res.render("user/index", await this.userService.getUsers());
+  // };
 }

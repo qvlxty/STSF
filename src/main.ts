@@ -1,11 +1,14 @@
 import { AppExpress } from "./frameworkCore/app.facade";
 import { Container } from "./frameworkCore/container.class";
 import { ConfigService } from "./frameworkCore/services/config/config.service";
+import { UserController } from './application/modules/user/user.controller'
+import { ApiController } from "frameworkCore/services/apiGenerate/api.controller";
 
 const bootApp = async function () {
   const expressApp = new AppExpress();
   const AppContainer = new Container()
   await AppContainer.init({
+    controllers: [UserController,ApiController],
     app: expressApp
   });
 

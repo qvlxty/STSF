@@ -27,11 +27,11 @@ export abstract class App {
   }
 
   // Функция для установки роутов в приложение/библиотеку
-  abstract routeInstall = (route: IRoute, controllerPrefix: string = "") => {};
+  abstract routeInstall = (controller, route: IRoute, controllerPrefix: string = "") => { };
   // Функция для установки мидлвары в приложение/библиотеку
-  abstract middlewareInstall = (middleware: IMiddleware, prefix: string = "") => {};
+  abstract middlewareInstall = (middleware: IMiddleware, prefix: string = "") => { };
   // Функция для настройки приложения/библиотеки
-  abstract setupApp = (settings: ISettings) => {};
+  abstract setupApp = (settings: ISettings) => { };
 }
 
 /*
@@ -50,7 +50,7 @@ export class AppExpress extends App {
     modules = [],
     staticFolders = [],
     viewCatalog = "src/application/views"
-  }: ISettings)  => {
+  }: ISettings) => {
     if (typeof viewEngine !== undefined && viewEngine !== null)
       this.server.set("view engine", viewEngine);
     if (typeof modules !== undefined && modules !== null)
@@ -62,24 +62,11 @@ export class AppExpress extends App {
       this.server.set("views", viewCatalog);
   };
 
-  routeInstall = (r: IRoute, controllerPrefix: string = "") => {
-    switch (r.method) {
-      case HttpMethod.GET:
-        this.router.get(`${controllerPrefix}${r.path}`, r.action);
-        break;
-      case HttpMethod.POST:
-        this.router.post(`${controllerPrefix}${r.path}`, r.action);
-        break;
-      case HttpMethod.PATCH:
-        this.router.patch(`${controllerPrefix}${r.path}`, r.action);
-        break;
-      case HttpMethod.UPDATE:
-        this.router.update(`${controllerPrefix}${r.path}`, r.action);
-        break;
-      case HttpMethod.DELETE:
-        this.router.delete(`${controllerPrefix}${r.path}`, r.action);
-        break;
-    }
+  routeInstall = (controller, r: IRoute, controllerPrefix: string = "") => {
+    const methodName = r.method.toLocaleLowerCase();
+    // Чтоб не потерять контекст используется функция-обертка
+    const wrapper = async (req,res) => { await controller[r.methodName](req,res); }
+    this.router[methodName](`${controllerPrefix}${r.path}`, wrapper);
   };
 
   middlewareInstall = (m: IMiddleware, prefix: string = "") => {

@@ -1,4 +1,4 @@
-# Контроллер
+# Контроллер (deprecated)
 
 Контроллер представляет из себя программный слой, в котором идёт связывание конкретных роутов приложений с обслуживающими их сервисами.
 
@@ -20,6 +20,19 @@ export class UserController extends Controller {
   ];
   middlewares = (): IMiddleware[] => [];
 }
+```
+
+### MethodApi декоратор
+
+Начиная с версии 0.3 , для описания методов контроллера используются декораторы @MethodApi()
+
+```ts
+import {  ApiMethod, HttpMethod } from "frameworkCore/decorators/controller.decorator";
+
+ @ApiMethod(HttpMethod.GET, '/')
+  public helloWorld(req, res) {
+    res.send('hello world');
+  }
 ```
 
 ### Префикс

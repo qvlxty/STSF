@@ -11,7 +11,7 @@ export enum HttpMethod {
 export interface IRoute {
   method: HttpMethod;
   path: string;
-  action: (req, res) => any | Promise<any>;
+  methodName: string;
   // Функция валидации
   validation?: (req, res, next) => any;
   // Описание роута
@@ -31,11 +31,9 @@ export abstract class Controller {
   // Префикс, используемый для обособления контроллеров
   public controllerApiPrefix: string;
   // Абстрактный метод, который настраивает роутинг
-  public abstract routes(): IRoute[];
-  public abstract middlewares(): IMiddleware[];
+  public routes: IRoute[] ;
+  public middlewares = (): IMiddleware[] => [];
   constructor(private readonly mainContainer: Container) {
-    if (this.controllerApiPrefix === null) {
-      this.controllerApiPrefix = ''
-    }
+   
   }
 }

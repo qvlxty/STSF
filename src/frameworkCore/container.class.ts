@@ -110,13 +110,15 @@ export class Container {
     for (const iter of Object.values(this.controllers)) {
       for (const m of iter.middlewares())
         middlewareInstall(m, iter.controllerApiPrefix);
-      for (const r of iter.routes()) routeInstall(r, iter.controllerApiPrefix);
+      for (const r of Object.keys(iter.routes)) {
+        routeInstall(iter, iter.routes[r], iter.controllerApiPrefix);
+      }
     }
   }
   // Возвращает все роуты в контейнере
   public getAllRoutes = () =>
     Object.values(this.controllers).map(el => ({
       prefix: el.controllerApiPrefix,
-      routes: el.routes()
+      routes: el.routes
     }));
 }

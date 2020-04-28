@@ -11,26 +11,30 @@
 <%
 const httpMethod = {
     'GET':"primary",
-    'POST':"dark",
+    'POST':"info",
     'PATCH':"success",
-    'UPDATE':"info",
+    'UPDATE':"warning",
     'DELETE':"danger"
   }
 %>
 <body class="d-flex flex-column h-100" style="min-height: 100vh;">
     <div class="container flex-shrink-0">
         <br />
-        <h1>Документация v0.2.0</h1>
+        <h1>Документация v0.2.2</h1>
         <hr>
         <% 
         let methodCount = 0;
         for (const iter of data) {%>
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"> <strong>Pref: </strong><a href="#"><%= iter.prefix %> </a></li>
+            <li class="breadcrumb-item"> <strong>Api Prefix: </strong><a href="#"><%= iter.prefix %> </a></li>
         </ol>
-        <% for (const route of iter.routes) {  %>
+        <% 
+        for (const key of Object.keys(iter.routes))
+         {  
+             const route = iter.routes[key];
+            %>
         <p>
-            <div class="alert alert-primary">
+            <div class="alert alert-<%= httpMethod[route.method] %>">
                 <a href="#" onclick="toggleDescription(<%= methodCount %>)">
                     <span class="badge badge-<%= httpMethod[route.method] %>"><%= route.method %></span>
                     <%= iter.prefix %><%= route.path%>
