@@ -57,7 +57,7 @@ export class AppExpress extends App {
       for (const iter of modules) this.router.use(iter);
     if (typeof staticFolders !== undefined && staticFolders !== null)
       for (const iter of staticFolders)
-        this.server.use(iter.path, Express.static(iter.path));
+        this.server.use(iter.path, Express.static(iter.folder));
     if (typeof viewCatalog !== undefined && viewCatalog !== null)
       this.server.set("views", viewCatalog);
   };
