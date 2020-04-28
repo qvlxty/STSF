@@ -3,6 +3,9 @@ import { IRoute, HttpMethod } from "frameworkCore/base.controller";
 function ControllerApiPrefix(apiPrefix: string = '') {
     return function (constructor: Function) {
         constructor.prototype.controllerApiPrefix = apiPrefix;
+        if (!constructor.prototype.routes) {
+            constructor.prototype.routes = [];
+        }
     }
 }
 
