@@ -5,9 +5,9 @@
 В данном файле приведён пример реализации контроллера с комментариями
 
 ```ts
+  // URL Префикс контроллера
+@ControllerPrefix('/user')
 export class UserController extends Controller {
-  // API Префикс контроллера
-  controllerApiPrefix = "/user";
   // Массив роутов приложения
   routes = (): IRoute[] => [
     {
@@ -22,6 +22,10 @@ export class UserController extends Controller {
 }
 ```
 
+### Префикс
+
+Для того, чтобы контроллер находился в обособленной части API, можно использовать декоратор ``@ControllerPrefix(string)``
+
 ## Middleware
 
 Чтобы устанавливать промежуточные обработчики, будь то авторизация, проверка роли пользователя, даже целая подсистема RBAC, расширенный конвеер валидации или еще что-нибудь - вы можете использовать массив промежуточных обработчиков в классе Controller.
@@ -31,9 +35,8 @@ export class UserController extends Controller {
 Ниже приведён пример описания middleware в контроллере.
 
 ```ts
+@ControllerPrefix('/user')
 export class UserController extends Controller {
-  // API Префикс контроллера
-  controllerApiPrefix = "/user";
   // Массив роутов приложения
   routes = (): IRoute[] => [
     {

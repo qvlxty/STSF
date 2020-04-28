@@ -12,37 +12,43 @@
 <body class="d-flex flex-column h-100" style="min-height: 100vh;">
     <div class="container flex-shrink-0">
         <br />
-        <h1>Документация v0.1.0</h1>
+        <h1>Документация v0.2.0</h1>
         <hr>
-        <% for (const iter of data) {%>
+        <% 
+        let methodCount = 0;
+        for (const iter of data) {%>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"> <strong>Pref: </strong><a href="#"><%= iter.prefix %> </a></li>
         </ol>
-        <div class="card-deck">
-            <% for (const route of iter.routes) {
-                 %>
-            <div class="card border-primary mb-3" style="max-width: 20rem;">
-                <div class="card-header">
-                    <span class="badge badge-secondary"><%= route.method %></span>
-                    <a href="<%= iter.prefix %><%= route.path%>"><%= iter.prefix %><%= route.path%></a>
+        <% for (const route of iter.routes) {  %>
+        <p>
+            <div class="alert alert-primary">
+                <a href="#" onclick="toggleDescription(<%= methodCount %>)">
+                    <span class="badge badge-dark"><%= route.method %></span>
+                    <%= iter.prefix %><%= route.path%>
+                </a>
+            </div>
+        </p>
+        <div style="display:none" id="methodId<%= methodCount%>">
+            <blockquote><%= route.description %></blockquote>
+            <hr>
+            <div class="row">
+                <div class="col">
+                    <p><kbd>Входные данные:</kbd></p>
+                    <% if (route.inData) { %>
+                    <code><%= JSON.stringify(route.inData); %></code>
+                    <% } %>
                 </div>
-                <div class="card-body">
-                    <p class="card-text"><%= route.description %></p>
-                    <hr>
-                    <p class="card-text">
-                        <% if (route.inData) { %>
-                        <p>Входные данные:</p>
-                        <code><%= JSON.stringify(route.inData); %></code>
-                        <% } %>
-                        <% if (route.outData) { %>
-                        <p>Выходные данные:</p>
-                        <p><code><%= JSON.stringify(route.outData); %></code></p>
-                        <% } %>
-                    </p>
+                <div class="col">
+                    <p><kbd>Выходные данные:</kbd></p>
+                    <% if (route.outData) { %>
+                    <p><code><%= JSON.stringify(route.outData); %></code></p>
+                    <% } %>
                 </div>
             </div>
-            <% } %>
         </div>
+
+        <% methodCount++; } %>
         <% } %>
     </div>
     <footer class="footer mt-auto py-3 bg-dark ">
@@ -52,6 +58,12 @@
         </div>
     </footer>
 </body>
+<script>
+    function toggleDescription(id) {
+        let elStyle = document.getElementById(`methodId${id}`).style;
+        elStyle.display = elStyle.display === 'none' ? 'block' : 'none';
+    }
+</script>
 <style>
     main>.container {
         padding: 60px 15px 0;

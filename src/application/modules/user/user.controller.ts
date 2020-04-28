@@ -8,9 +8,10 @@ import {
   IMiddleware
 } from "frameworkCore/base.controller";
 import passport = require("passport");
-import bodyParser = require("body-parser");
 import { PassportService } from "application/passport/passport.service";
+import { ControllerPrefix } from "frameworkCore/decorators/controller.decorator";
 
+@ControllerPrefix('/user')
 export class UserController extends Controller {
   constructor(
     c: Container,
@@ -21,7 +22,6 @@ export class UserController extends Controller {
   ) {
     super(c);
   }
-  controllerApiPrefix = "/user";
   routes = (): IRoute[] => [
     {
       method: HttpMethod.GET,

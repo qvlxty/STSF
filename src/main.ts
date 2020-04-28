@@ -1,4 +1,4 @@
-import { AppExpress, App } from "./frameworkCore/app.facade";
+import { AppExpress } from "./frameworkCore/app.facade";
 import { Container } from "./frameworkCore/container.class";
 import { ConfigService } from "./frameworkCore/services/config/config.service";
 

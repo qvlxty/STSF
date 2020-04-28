@@ -29,9 +29,13 @@ export interface IMiddleware {
 
 export abstract class Controller {
   // Префикс, используемый для обособления контроллеров
-  public controllerApiPrefix: string = "/";
+  public controllerApiPrefix: string;
   // Абстрактный метод, который настраивает роутинг
   public abstract routes(): IRoute[];
   public abstract middlewares(): IMiddleware[];
-  constructor(private readonly mainContainer: Container) {}
+  constructor(private readonly mainContainer: Container) {
+    if (this.controllerApiPrefix === null) {
+      this.controllerApiPrefix = ''
+    }
+  }
 }
