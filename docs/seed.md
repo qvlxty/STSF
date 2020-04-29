@@ -4,7 +4,7 @@
 
 Чтобы сделать собстсвенный seed данных, необходимо сделать всего лишь пару простых шагов:
 
-1. Загрузить репозиторий интересующей вас сущности в **db.seed.service.ts**
+1. Загрузить репозиторий интересующей сущности в **db.seed.service.ts**
 
 ```ts
 // db.seed.service.ts 
@@ -26,7 +26,7 @@ export class DbSeedService extends BaseService {
 // db.seed.service.ts 
 createUser() {
     // Возвращает Promise, который ресолвится вне
-      return this.userRepository.model.create({
+      return this.userRepository.create({
           login:"admin",
           password:"123456"
       })

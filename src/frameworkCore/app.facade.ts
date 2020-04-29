@@ -1,5 +1,7 @@
 import * as Express from "express";
 import { IRoute, HttpMethod, IMiddleware } from "./base.controller";
+import { HttpException } from "./exceptions/BaseHttpException";
+import bodyParser = require("body-parser");
 
 interface ISettings {
   viewEngine?: string; // Шаблонизатор
@@ -42,7 +44,13 @@ export class AppExpress extends App {
   constructor(server: Express.Application = Express(), router: Express.Router = Express.Router()) {
     super(server, router);
     server.use(router);
-    this.setupApp({});
+    this.setupApp({
+      // По-умолчанию для парсинга POST
+      // ToDo: возможно, выпилить в будущем
+      modules: [
+        bodyParser.urlencoded({ extended: true }),
+      ]
+    });
   }
 
   setupApp = ({
@@ -65,17 +73,24 @@ export class AppExpress extends App {
   routeInstall = (controller, r: IRoute, controllerPrefix: string = "") => {
     const methodName = r.method.toLocaleLowerCase();
     // Чтоб не потерять контекст используется функция-обертка
-    const wrapper = async (req,res) => { 
+    const wrapper = async (req, res) => {
       try {
         // По-умолчанию функции должны возвращать объект, или ничего
-        const dataToSend = await controller[r.methodName](req,res);
+        const dataToSend = await controller[r.methodName](req, res);
         if (dataToSend) {
-          res.json
-        } 
+          res.json(dataToSend);
+        }
       } catch (err) {
+        // Если пользователь выбросил ошибку на стороне контроллера, то правильно обработаем
+        if (err instanceof HttpException) {
+          res.json(err.getErr.msg).status(err.getErr.status);
+        }
+        else {
+          // В противном случае вывести ошибку как есть
           res.json(err);
         }
-     }
+      }
+    }
     this.router[methodName](`${controllerPrefix}${r.path}`, wrapper);
   };
 

@@ -31,9 +31,9 @@ export abstract class Controller {
   // Префикс, используемый для обособления контроллеров
   public controllerApiPrefix: string;
   // Абстрактный метод, который настраивает роутинг
-  public routes: IRoute[] ;
+  public routes: IRoute[];
   public middlewares = (): IMiddleware[] => [];
   constructor(private readonly mainContainer: Container) {
-   
+    console.info("\x1b[32m%s\x1b[0m", `[SERVER] Контроллер ${this.constructor.name}`)
   }
 }

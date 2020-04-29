@@ -3,13 +3,11 @@ import { Request, Response } from "express";
 import { Container } from "frameworkCore/container.class";
 import {
   Controller,
-  HttpMethod,
-  IRoute,
   IMiddleware
 } from "frameworkCore/base.controller";
 import passport = require("passport");
 import { PassportService } from "application/passport/passport.service";
-import { ControllerApiPrefix, GET,POST } from "frameworkCore/decorators/controller.decorator";
+import { ControllerApiPrefix, Get, Post, ApiMethodDescription } from "frameworkCore/decorators/controller.decorator";
 
 @ControllerApiPrefix('/user')
 export class UserController extends Controller {
@@ -23,23 +21,17 @@ export class UserController extends Controller {
     super(c);
   }
 
-  // @ApiMethod(
-  //   HttpMethod.GET, 
-  //   '/hello',
-  //   'Роут для отображения фразы HelloWorld'
-  // )
+  @Get('/hello')
   helloWorld(req, res) {
     return "hello world";
   }
 
-  // @ApiMethod(
-  //   HttpMethod.POST,
-  //   '/auth',
-  //   'Метод для аутентификации',
-  //   { login: "user", password: "qwerty" },
-  //   "400 ошибка, если запрос неверен. 200 Если вход успешен. 401 если креды неправильные"
-  // )
-  auth(req,res) {
+  @Post('/auth')
+  @ApiMethodDescription({
+    description: 'Метолд аутентификации',
+    inData: { login: "user", password: "qwerty" }
+  })
+  auth(req, res) {
     res.send('hello');
   }
 
@@ -54,8 +46,8 @@ export class UserController extends Controller {
     }
   ];
 
-  // @ApiMethod(HttpMethod.GET, )
-  // public getUsers (req: Request, res: Response) => {
-  //   res.render("user/index", await this.userService.getUsers());
-  // };
+  @Get('/')
+  public async getUsers (req: Request, res: Response) {
+    res.render("user/index", await this.userService.getUsers());
+  };
 }

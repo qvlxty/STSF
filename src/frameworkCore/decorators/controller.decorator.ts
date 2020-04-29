@@ -25,13 +25,16 @@ function ApiMethodDescription({
         target.routes[propertyKey] = {
             ...target.routes[propertyKey],
             description,
-            inData: JSON.stringify(inData),
-            outData: JSON.stringify(outData)
+            inData: inData,
+            outData: outData
         }
     };
 }
 
-function GET(
+/*
+    ToDo: Избавиться от ненужной копипасты
+*/
+function Get(
     path: string,
 ) {
     return (target: any, propertyKey: string, descriptor?: TypedPropertyDescriptor<any>) => {
@@ -44,12 +47,12 @@ function GET(
             methodName: propertyKey,
         }
         target.routes[propertyKey] = {
-            ...target.routes[propertyKey],...newRoute
+            ...target.routes[propertyKey], ...newRoute
         };
     }
 }
 
-function POST(
+function Post(
     path: string,
 ) {
     return (target: any, propertyKey: string, descriptor?: TypedPropertyDescriptor<any>) => {
@@ -61,11 +64,13 @@ function POST(
             method: HttpMethod.POST,
             methodName: propertyKey,
         }
-        target.routes[propertyKey] = newRoute;
+        target.routes[propertyKey] = {
+            ...target.routes[propertyKey], ...newRoute
+        };
     }
 }
 
-function PATCH(
+function Patch(
     path: string,
 ) {
     return (target: any, propertyKey: string, descriptor?: TypedPropertyDescriptor<any>) => {
@@ -77,11 +82,13 @@ function PATCH(
             method: HttpMethod.PATCH,
             methodName: propertyKey,
         }
-        target.routes[propertyKey] = newRoute;
+        target.routes[propertyKey] = {
+            ...target.routes[propertyKey], ...newRoute
+        };
     }
 }
 
-function DELETE(
+function Delete(
     path: string,
 ) {
     return (target: any, propertyKey: string, descriptor?: TypedPropertyDescriptor<any>) => {
@@ -93,11 +100,13 @@ function DELETE(
             method: HttpMethod.DELETE,
             methodName: propertyKey,
         }
-        target.routes[propertyKey] = newRoute;
+        target.routes[propertyKey] = {
+            ...target.routes[propertyKey], ...newRoute
+        };
     }
 }
 
-function UPDATE(
+function Update(
     path: string,
 ) {
     return (target: any, propertyKey: string, descriptor?: TypedPropertyDescriptor<any>) => {
@@ -109,10 +118,10 @@ function UPDATE(
             method: HttpMethod.DELETE,
             methodName: propertyKey,
         }
-        target.routes[propertyKey] = newRoute;
+        target.routes[propertyKey] = {
+            ...target.routes[propertyKey], ...newRoute
+        };
     }
 }
 
-
-
-export { ControllerApiPrefix, ApiMethodDescription, GET, POST, PATCH, DELETE, UPDATE }
+export { ControllerApiPrefix, ApiMethodDescription, Get, Post, Patch, Update, Delete }

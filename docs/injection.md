@@ -1,6 +1,6 @@
 # Инъекция зависимостей
 
-Для того, чтобы иметь доступ и работу с отдаленным сущностями необходима их инъекция в текущий сервис/модель, в котором вы работаете.
+Для того, чтобы иметь доступ и работу с отдаленным сущностями необходима их инъекция в текущий сервис/репозиторий, в котором вы работаете.
 
 Загрузка сущности происходит с помощью дополнительных параметров в конструкторе
 
@@ -11,7 +11,7 @@ export class CommentService extends BaseService {
   constructor(
     e: Container,
     private readonly postService: PostService = e.getService(PostService),
-    private readonly commentModel: CommentModel = e.getModel(CommentModel)
+    private readonly commentRepo: Repository<Comment> = e.getRepository(Comment)
   ) {
     super(e);
   }

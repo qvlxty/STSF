@@ -17,6 +17,7 @@ const httpMethod = {
     'DELETE':"danger"
   }
 %>
+
 <body class="d-flex flex-column h-100" style="min-height: 100vh;">
     <div class="container flex-shrink-0">
         <br />
@@ -40,8 +41,10 @@ const httpMethod = {
                     <%= iter.prefix %><%= route.path%>
                 </a>
             </div>
+
         </p>
-        <div style="display:none" id="methodId<%= methodCount%>">
+        <div id="methodId<%= methodCount%>"
+            style="display:none; background-color: #FCFCFC; padding:15px; border:1px solid #CCC;">
             <blockquote><%= route.description %></blockquote>
             <hr>
             <div class="row">
@@ -49,6 +52,22 @@ const httpMethod = {
                     <p><kbd>Входные данные:</kbd></p>
                     <% if (route.inData) { %>
                     <code><%= JSON.stringify(route.inData); %></code>
+                    <br />
+                    <b>
+                        <p>Сгенерированная форма:</p>
+                    </b>
+                    <form action="<%= iter.prefix %><%= route.path%>" method="<%= route.method %>">
+                        <% for (const inDataIter of Object.keys(route.inData)) {
+                            const curInDataField = route.inData[inDataIter];
+                            %>
+
+                        <div class="form-group">
+                            <label><%= inDataIter %></label>
+                            <input type="input" class="form-control" name="<%= inDataIter %>" placeholder="<%= route.inData[inDataIter] %>">
+                        </div>
+                        <% } %>
+                        <button type="submit" class="btn btn-info">Отправить</button>
+                    </form>
                     <% } %>
                 </div>
                 <div class="col">
@@ -58,6 +77,8 @@ const httpMethod = {
                     <% } %>
                 </div>
             </div>
+            <hr>
+            <a href="<%= iter.prefix %><%= route.path%>" class="btn btn-success">Перейти по роуту</a>
         </div>
 
         <% methodCount++; } %>

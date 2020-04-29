@@ -2,24 +2,56 @@
 
 Контроллер представляет из себя программный слой, в котором идёт связывание конкретных роутов приложений с обслуживающими их сервисами.
 
-В данном файле приведён пример реализации контроллера с комментариями
+В данном файле приведён пример реализации самого простого контроллера с комментариями
 
 ```ts
   // URL Префикс контроллера
-@ControllerPrefix('/user')
+@ControllerApiPrefix('/user')
 export class UserController extends Controller {
-  // Массив роутов приложения
-  routes = (): IRoute[] => [
-    {
-      method: HttpMethod.GET,
-      action: (req, res) => {
-        res.send("hello world");
-      },
-      path: "/list" // http://server.foo.bar/user/list
-    }
-  ];
-  middlewares = (): IMiddleware[] => [];
-}
+
+  // Декоратор определяющий тип метода 
+  @Get('/hello')
+  // Функция-обработчик
+  helloWorld(req, res) {
+    return "hello world";
+  }
+
+```
+
+Если к приложению подключен генератор [документации](./doc.generate.md), то все новые роуты для контроллеров вы сможете видеть по адресу **/doc**
+
+Если используется AppExpress реализация, то каждый метод контролера 
+должен получать на вход два параметра - req и res соответственно - это request и response объекты библиотеки express.
+
+Если метод контроллера должен возвращать JSON, тогда достаточно использовать return, как в приведенном выше примере.
+
+### Обработка ошибок
+
+Для обработки ошибок используется класс HttpException, который можно наследовать и переиспользовать для своих ошибок. Пример использования в методе контроллера:
+
+```ts
+import { HttpException } from "frameworkCore/exceptions/BaseHttpException";
+...
+
+  @Get('/hello')
+  helloWorld(req, res) {
+    if (!req.body.data)
+      throw new HttpException()
+    return "hello world";
+  }
+```
+
+### Рендеринг страничек
+
+Вместо return , необходимо использовать отрисовки файла шаблона , достаточно вызвать res.render();
+
+```ts
+
+  @Get('/')
+  public async getUsers (req: Request, res: Response) {
+    res.render("user/index", await this.userService.getUsers());
+  };
+
 ```
 
 ### MethodApi декоратор
@@ -50,16 +82,7 @@ import {  ApiMethod, HttpMethod } from "frameworkCore/decorators/controller.deco
 ```ts
 @ControllerPrefix('/user')
 export class UserController extends Controller {
-  // Массив роутов приложения
-  routes = (): IRoute[] => [
-    {
-      method: HttpMethod.GET,
-      action: (req, res) => {
-        res.send(req.msg);
-      }, // Выведет hello world
-      path: "/list" // http://server.foo.bar/user/list
-    }
-  ];
+ 
   middlewares = (): IMiddleware[] => [
     {
       paths: ["/list"], // Установить
@@ -74,22 +97,18 @@ export class UserController extends Controller {
 
 Гибкая настройка позволяет задавать middleware для множества постов через два массива **paths** и **uses**.
 
+
 ````ts
-routes = (): IRoute[] => [
-    {
-      method: HttpMethod.GET,
-      action: (req, res) => {
-        console.info(req.msg)
-        res.send(req.msg);
-      },
-      path: "/helloWorld"
-    },
-    {
-      method: HttpMethod.GET,
-      action: this.getUsers,
-      path: "/list"
-    }
-  ];
+
+  @Get('/helloworld')
+  public hello(req,res) {
+    res.send('hello')
+  }
+
+  @Get('/list')
+  public takeList(req,res) {
+    return [1,2,3,4,5];
+  }
 
   middlewares = (): IMiddleware[] => [
     {
