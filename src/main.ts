@@ -3,15 +3,11 @@ import { Container } from "./frameworkCore/container.class";
 import { ConfigService } from "./frameworkCore/services/config/config.service";
 import { UserController } from './application/modules/user/user.controller'
 import { ApiController } from "frameworkCore/services/apiGenerate/api.controller";
-import { GuestBookController } from "application/modules/guestBook/guestBook.controller";
 
 const bootApp = async function () {
   const expressApp = new AppExpress();
   const AppContainer = new Container()
-  await AppContainer.init({
-    controllers: [GuestBookController,ApiController],
-    app: expressApp
-  });
+  await AppContainer.init({});
 
   const port = AppContainer.getService(ConfigService).config.get("port");
   expressApp.server.listen(port || 3000, () => {
