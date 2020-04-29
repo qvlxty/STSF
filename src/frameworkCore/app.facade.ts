@@ -65,7 +65,17 @@ export class AppExpress extends App {
   routeInstall = (controller, r: IRoute, controllerPrefix: string = "") => {
     const methodName = r.method.toLocaleLowerCase();
     // Чтоб не потерять контекст используется функция-обертка
-    const wrapper = async (req,res) => { await controller[r.methodName](req,res); }
+    const wrapper = async (req,res) => { 
+      try {
+        // По-умолчанию функции должны возвращать объект, или ничего
+        const dataToSend = await controller[r.methodName](req,res);
+        if (dataToSend) {
+          res.json
+        } 
+      } catch (err) {
+          res.json(err);
+        }
+     }
     this.router[methodName](`${controllerPrefix}${r.path}`, wrapper);
   };
 

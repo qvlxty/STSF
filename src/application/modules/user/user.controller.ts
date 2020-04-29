@@ -9,7 +9,7 @@ import {
 } from "frameworkCore/base.controller";
 import passport = require("passport");
 import { PassportService } from "application/passport/passport.service";
-import { ControllerApiPrefix, ApiMethod } from "frameworkCore/decorators/controller.decorator";
+import { ControllerApiPrefix, GET,POST } from "frameworkCore/decorators/controller.decorator";
 
 @ControllerApiPrefix('/user')
 export class UserController extends Controller {
@@ -23,22 +23,22 @@ export class UserController extends Controller {
     super(c);
   }
 
-  @ApiMethod(
-    HttpMethod.GET, 
-    '/hello',
-    'Роут для отображения фразы HelloWorld'
-  )
+  // @ApiMethod(
+  //   HttpMethod.GET, 
+  //   '/hello',
+  //   'Роут для отображения фразы HelloWorld'
+  // )
   helloWorld(req, res) {
-    res.send("helloWorld");
+    return "hello world";
   }
 
-  @ApiMethod(
-    HttpMethod.POST,
-    '/auth',
-    'Метод для аутентификации',
-    { login: "user", password: "qwerty" },
-    "400 ошибка, если запрос неверен. 200 Если вход успешен. 401 если креды неправильные"
-  )
+  // @ApiMethod(
+  //   HttpMethod.POST,
+  //   '/auth',
+  //   'Метод для аутентификации',
+  //   { login: "user", password: "qwerty" },
+  //   "400 ошибка, если запрос неверен. 200 Если вход успешен. 401 если креды неправильные"
+  // )
   auth(req,res) {
     res.send('hello');
   }

@@ -9,12 +9,30 @@ function ControllerApiPrefix(apiPrefix: string = '') {
     }
 }
 
-function ApiMethod(
-    method: HttpMethod,
+function ApiMethodDescription({
+    description = '',
+    inData = {},
+    outData = {}
+}: {
+    description?: string,
+    inData?: Object,
+    outData?: Object,
+}) {
+    return (target: any, propertyKey: string, descriptor?: TypedPropertyDescriptor<any>) => {
+        if (!target.routes) {
+            target.routes = [];
+        }
+        target.routes[propertyKey] = {
+            ...target.routes[propertyKey],
+            description,
+            inData: JSON.stringify(inData),
+            outData: JSON.stringify(outData)
+        }
+    };
+}
+
+function GET(
     path: string,
-    description: string = '',
-    inData: Object = {},
-    outData: Object = {},
 ) {
     return (target: any, propertyKey: string, descriptor?: TypedPropertyDescriptor<any>) => {
         if (!target.routes) {
@@ -22,11 +40,74 @@ function ApiMethod(
         }
         const newRoute: IRoute = {
             path,
-            method: method,
+            method: HttpMethod.GET,
             methodName: propertyKey,
-            description,
-            inData: JSON.stringify(inData),
-            outData: JSON.stringify(outData)
+        }
+        target.routes[propertyKey] = {
+            ...target.routes[propertyKey],...newRoute
+        };
+    }
+}
+
+function POST(
+    path: string,
+) {
+    return (target: any, propertyKey: string, descriptor?: TypedPropertyDescriptor<any>) => {
+        if (!target.routes) {
+            target.routes = [];
+        }
+        const newRoute: IRoute = {
+            path,
+            method: HttpMethod.POST,
+            methodName: propertyKey,
+        }
+        target.routes[propertyKey] = newRoute;
+    }
+}
+
+function PATCH(
+    path: string,
+) {
+    return (target: any, propertyKey: string, descriptor?: TypedPropertyDescriptor<any>) => {
+        if (!target.routes) {
+            target.routes = [];
+        }
+        const newRoute: IRoute = {
+            path,
+            method: HttpMethod.PATCH,
+            methodName: propertyKey,
+        }
+        target.routes[propertyKey] = newRoute;
+    }
+}
+
+function DELETE(
+    path: string,
+) {
+    return (target: any, propertyKey: string, descriptor?: TypedPropertyDescriptor<any>) => {
+        if (!target.routes) {
+            target.routes = [];
+        }
+        const newRoute: IRoute = {
+            path,
+            method: HttpMethod.DELETE,
+            methodName: propertyKey,
+        }
+        target.routes[propertyKey] = newRoute;
+    }
+}
+
+function UPDATE(
+    path: string,
+) {
+    return (target: any, propertyKey: string, descriptor?: TypedPropertyDescriptor<any>) => {
+        if (!target.routes) {
+            target.routes = [];
+        }
+        const newRoute: IRoute = {
+            path,
+            method: HttpMethod.DELETE,
+            methodName: propertyKey,
         }
         target.routes[propertyKey] = newRoute;
     }
@@ -34,4 +115,4 @@ function ApiMethod(
 
 
 
-export { ControllerApiPrefix, ApiMethod }
+export { ControllerApiPrefix, ApiMethodDescription, GET, POST, PATCH, DELETE, UPDATE }
